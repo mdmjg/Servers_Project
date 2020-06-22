@@ -2,12 +2,12 @@
 
 ### Setting up the database
 
-1. Install the Go pq driver $ go get -u github.com/lib/pq
-2. Initialize the built-in SQL shell: $ cockroach sql --insecure
+1. Install the Go pq driver `$ go get -u github.com/lib/pq`
+2. Initialize the built-in SQL shell: `$ cockroach sql --insecure`
 3. In the SQL shell run: 
- i) CREATE DATABASE servers_project;
- ii) SET database = servers_project;
- iii) CREATE TABLE "domains" (
+  1. CREATE DATABASE servers_project;
+  2. SET database = servers_project;
+  3. CREATE TABLE "domains" (
     "name" STRING(100),
     "servers_changed" STRING(5),
     "ssl_grade" STRING(2),
@@ -18,7 +18,7 @@
     "time" INT,
     PRIMARY KEY ("name")
 );
-iv) CREATE TABLE "endpoints" (
+4. CREATE TABLE "endpoints" (
     "name" STRING(100),
     "ip_address" STRING(100),
     "grade" STRING(2),
@@ -30,13 +30,13 @@ iv) CREATE TABLE "endpoints" (
 
 
 ### Setting up the servers
-1. In your terminal, go to the backend subfolder and install all Go dependencies by running $ go get -d ./...
-2. Start the server by running  $ go run server.go database.go domain.go
+1. In your terminal, go to the backend subfolder and install all Go dependencies by running `$ go get -d ./...`
+2. Start the server by running  `$ go run server.go database.go domain.go`
 
 
 ### Setting up Vue
-1. On another terminal window, go to the frontend/api subfolder and run $ npm install
-2. Start the app by running $ npm run serve
+1. On another terminal window, go to the frontend/api subfolder and run `$ npm install`
+2. Start the app by running `$ npm run serve`
 3. Go to http://localhost:8081/
 
 
