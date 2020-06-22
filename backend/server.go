@@ -44,8 +44,8 @@ func getDomain(ctx *fasthttp.RequestCtx) {
 	}
 }
 
+// gets the history of all domains
 func listDomains(ctx *fasthttp.RequestCtx) {
-	fmt.Println("helloo")
 	// set response headers
 	ctx.SetContentType("application/json; charset=UTF-8")
 	ctx.Response.Header.Set("Access-Control-Allow-Origin", "*")
@@ -62,6 +62,7 @@ func listDomains(ctx *fasthttp.RequestCtx) {
 }
 
 func main() {
+	port := "8000"
 	requestHandler := func(ctx *fasthttp.RequestCtx) {
 		switch string(ctx.Path()) {
 		case "/listDomains":
@@ -75,8 +76,8 @@ func main() {
 	// router.GET("/go/:route", Test)
 	// router.GET("/hello/:name", listDomains)
 	// router.POST("/getDomain", getDomain)
-	fmt.Println("server starting")
+	fmt.Println("Server starting on port ", port)
 
-	log.Fatal(fasthttp.ListenAndServe(":8000", requestHandler))
+	log.Fatal(fasthttp.ListenAndServe(":"+port, requestHandler))
 
 }

@@ -62,6 +62,7 @@ func (domain *Domain) getLogo() string {
 	return href[1]
 }
 
+// gets the Title of the website using regex on the html
 func (domain *Domain) getTitle() string { // domain is truora.com
 	name := (*domain).Name
 	_, body, err := fasthttp.Get(nil, "http://www."+name)
@@ -72,34 +73,46 @@ func (domain *Domain) getTitle() string { // domain is truora.com
 	re := regexp.MustCompile(`<title.*>[\s\S]*<\/title>`)
 	result := re.FindString(string(body)) // finds the substring
 	i := strings.Index(result, ">")
+	if i < 0 {
+		return "N/A"
+	}
 	title := result[i+1 : len(result)-8]
 	return title
 
 }
 
+//gets Owner of IPaddress using regex
 func getOwner(text string) string {
 	// get owner
 	// re := regexp.MustCompile(`OrgName:.*OrgId`)
 	re := regexp.MustCompile(`[Oo]rg[-]?[Nn]ame:([^\:]*)`) // split the sentence and remove the last word
 	result := re.FindString(text)
 	orgName := strings.Split(result, " ")
+	if len(orgName) <= 1 {
+		return "N/A"
+	}
 	orgName = orgName[1 : len(orgName)-1]
 	result = strings.Join(orgName, " ")
 	return result
 }
 
+//gets Country of IPaddress
 func getCountry(text string) string {
 	// get country
 	re := regexp.MustCompile(`[cC]ountry: [A-Za-z]+`)
 	country_name := re.FindString(text)
+	if country_name == "" {
+		return "N/A"
+	}
 	country_name = country_name[9:] // trial and error
 	return country_name
 }
 
+//Calculates lowest SSL grade from the endpoints
 func (domain *Domain) getSSLGrade() string {
 	lowest := "A+"
 	for _, endpoint := range domain.Endpoints {
-		if lowest == "A+" && endpoint.Grade == "A" {
+		if lowest == "A+" && endpoint.Grade == "A" { // asci values call for this exception
 			lowest = "A"
 			continue
 		}
