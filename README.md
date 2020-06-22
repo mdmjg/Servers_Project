@@ -1,6 +1,6 @@
-#Setup
+# Setup
 
-# Setting up the database
+### Setting up the database
 
 1. Install the Go pq driver $ go get -u github.com/lib/pq
 2. Initialize the built-in SQL shell: $ cockroach sql --insecure
@@ -29,18 +29,18 @@ iv) CREATE TABLE "endpoints" (
 );
 
 
-# Setting up the servers
+### Setting up the servers
 1. In your terminal, go to the backend subfolder and install all Go dependencies by running $ go get -d ./...
 2. Start the server by running  $ go run server.go database.go domain.go
 
 
-#Setting up Vue
+### Setting up Vue
 1. On another terminal window, go to the frontend/api subfolder and run $ npm install
 2. Start the app by running $ npm run serve
 3. Go to http://localhost:8081/
 
 
-#Notes/Future Changes
+### Notes/Future Changes
 1. Some logos will return "fakeicon.com" because the page source does not follow the standards of defining the page's logo with a rel="shortcut icon" tag.
 2. The golang library fasthttp cannot handle get requests with really large headers. Thus, if you try to access a website with large headers, the package will crash
 3. When trying to get the owner of an IPAddress, I am using the GoLang package "WHois." This package will sometimes return results that do not list the owner. A possible fix would be using a system call instead, finding an alternative package, or calling an external API.
