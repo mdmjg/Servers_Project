@@ -19,7 +19,7 @@
     "time" INT,
     PRIMARY KEY ("name")
 );
-  4. CREATE TABLE "endpoints" (
+    4. CREATE TABLE "endpoints" (
     "name" STRING(100),
     "ip_address" STRING(100),
     "grade" STRING(2),
