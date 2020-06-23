@@ -3,8 +3,9 @@
 ### Setting up the database
 
 1. Install the Go pq driver `$ go get -u github.com/lib/pq`
-2. Initialize the built-in SQL shell: `$ cockroach sql --insecure`
-3. In the SQL shell run: 
+2. Start a CockroachDB local cluster `$ cockroach start --insecure --listen-addr=localhost:26257 --http-addr=localhost:8080`
+3. Initialize the built-in SQL shell: `$ cockroach sql --insecure`
+4. In the SQL shell run: 
   1. CREATE DATABASE servers_project;
   2. SET database = servers_project;
   3. CREATE TABLE "domains" (
