@@ -16,6 +16,10 @@ func insertDomain(domain Domain) {
 	if err != nil {
 		log.Fatal("error connecting to the database: ", err)
 	}
+	if err = db.Ping(); err != nil {
+		panic(err)
+	}
+	fmt.Println("Connected to the database")
 	if !isDomainPresent(db, domain.Name) {
 		//insert
 		fmt.Println("inserting into domain the domain named", domain.Name)

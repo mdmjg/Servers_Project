@@ -48,14 +48,17 @@ func values(d data) []string {
 }
 
 //needs some work
-func (domain *Domain) getLogo() string {
-	name := (*domain).Name
-	_, body, _ := fasthttp.Get(nil, "http://www."+name)
-	// re := regexp.MustCompile(`<link.* (rel="shortcut icon" [^<]*)`)
+func getLogo(body string) string {
 	re := regexp.MustCompile(`<link[^>]*(rel="shortcut icon" [^<]*)`)
-	result := re.FindString(string(body)) // finds the substring
+	result := re.FindString(body) // finds the substring
 	if len(result) == 0 {
-		return "fakeicon.com"
+		// now we try to match whitespace characters
+		re := regexp.MustCompile(`href=[\'\"](.*favicon[\S]*)[\'\"][^>]`)
+		result := re.FindStringSubmatch(body)
+		if len(result) == 0 {
+			return "N/A"
+		}
+		return result[1]
 	}
 	re = regexp.MustCompile(`href="([^"]*)`)
 	href := re.FindStringSubmatch(result)
@@ -63,15 +66,9 @@ func (domain *Domain) getLogo() string {
 }
 
 // gets the Title of the website using regex on the html
-func (domain *Domain) getTitle() string { // domain is truora.com
-	name := (*domain).Name
-	_, body, err := fasthttp.Get(nil, "http://www."+name)
-	if err != nil {
-		fmt.Println(err)
-		return "Faketitle"
-	}
+func getTitle(body string) string { // domain is truora.com
 	re := regexp.MustCompile(`<title.*>[\s\S]*<\/title>`)
-	result := re.FindString(string(body)) // finds the substring
+	result := re.FindString(body) // finds the substring
 	i := strings.Index(result, ">")
 	if i < 0 {
 		return "N/A"
@@ -132,15 +129,21 @@ func (domain *Domain) getEndpoints() []endpointStruct {
 	}
 
 	s := string(body)
+	// fmt.Println(s)
 	i := strings.Index(s, "\"endpoints\"")
 	newS := s[i+13 : len(s)-3] // remove trailing brackets
+	// fmt.Println("new S", newS)
 	indEndpoint := strings.Split(newS, "},")
+	fmt.Println("printing endpoints")
+	fmt.Println(indEndpoint)
 
 	//initialize slice of endpoints
 	endpoints := []endpointStruct{}
 
 	// parse string and convert to endpoint struct
 	for i := range indEndpoint {
+		fmt.Println("i am printing the individual endpoints")
+		fmt.Println(indEndpoint[i])
 		indEndpoint[i] = indEndpoint[i] + "}"
 		data := endpointStruct{}
 		json.Unmarshal([]byte(indEndpoint[i]), &data)
@@ -165,13 +168,28 @@ func (domain *Domain) getEndpoints() []endpointStruct {
 	return endpoints
 
 }
+func (domain Domain) getBody() string {
+	name := domain.Name
+	_, body, err := fasthttp.Get(nil, "http://www."+name)
+	if err != nil {
+		fmt.Println(err)
+		return "N/A"
+	}
+	return string(body)
+
+}
 
 // to get an icon, look in the head for /favicon.ico or shortcut icon and get the url. golangs function .index can help me find the location of a given string
 
 func populate(url string) Domain {
 	domain := Domain{Name: url}
-	domain.Logo = domain.getLogo()
-	domain.Title = domain.getTitle()
+	httpBody := domain.getBody()
+	if httpBody != "N/A" { // sometimes the get request does not return
+		domain.Logo = getLogo(httpBody)
+		domain.Title = getTitle(httpBody)
+
+	}
+
 	domain.Endpoints = domain.getEndpoints()
 	domain.Ssl_grade = domain.getSSLGrade()
 	fmt.Println(domain)
