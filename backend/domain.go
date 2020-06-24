@@ -53,12 +53,12 @@ func getLogo(body string) string {
 	result := re.FindString(body) // finds the substring
 	if len(result) == 0 {
 		// now we try to match whitespace characters
-		re := regexp.MustCompile(`href=[\'\"](.*favicon[\S]*)[\'\"][^>]`)
-		result := re.FindStringSubmatch(body)
-		if len(result) == 0 {
+		re := regexp.MustCompile(`<link[^>]*(rel="icon".*)[^>]`)
+		sub := re.FindStringSubmatch(body)
+		if len(sub) == 0 {
 			return "N/A"
 		}
-		return result[1]
+		result = sub[1]
 	}
 	re = regexp.MustCompile(`href="([^"]*)`)
 	href := re.FindStringSubmatch(result)
