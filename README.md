@@ -42,9 +42,9 @@
 
 
 ### Notes/Future Changes
-1. Some logos will return "fakeicon.com" because the page source does not follow the standards of defining the page's logo with a rel="shortcut icon" tag.
-2. The golang library fasthttp cannot handle get requests with really large headers. Thus, if you try to access a website with large headers, the package will crash
-3. When trying to get the owner of an IPAddress, I am using the GoLang package "WHois." This package will sometimes return results that do not list the owner. A possible fix would be using a system call instead, finding an alternative package, or calling an external API.
-4. Some websites return encrypted results to a Get request. I.E amazon.com (If using the fasthttp package)
-5. If website is down or does not exist, the program returns a warning that asks the user to input another website. However, server must be restarted
-6. Fasthhtp package can randomly through TCP dialing timeout errors.
+1. The golang library fasthttp cannot handle get requests with really large headers. Thus, if you try to access a website with large headers, the package will crash
+2. When trying to get the owner of an IPAddress, I am using the GoLang package "WHois." This package will sometimes return results that do not list the owner. A possible fix would be using a system call instead, finding an alternative package, or calling an external API.
+3. Some websites return encrypted results to a Get request. I.E amazon.com (If using the fasthttp package)
+4. If website is down or does not exist, the program returns a warning that asks the user to input another website. However, server must be restarted
+5. Fasthhtp package can randomly through TCP dialing timeout errors.
+
